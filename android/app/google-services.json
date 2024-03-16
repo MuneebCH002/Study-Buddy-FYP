@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "81637060365",
+    "project_id": "studdybussyapp",
+    "storage_bucket": "studdybussyapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81637060365:android:78337234a9794ad2994a44",
+        "android_client_info": {
+          "package_name": "com.example.studybuddyapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUutiuIkWiOAZLjeFt0LKi0Vv1N6Q67ik"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

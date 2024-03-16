@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Android
+/build/
+.gradle/
+/local.properties
+/.idea/
+/.gradle/
+
+# iOS
+*.sim
+
+# Flutter/Dart
+**/build/
+.dart_tool/
+.flutter-plugins
+.packages
+.pub/
+.pub-cache/
