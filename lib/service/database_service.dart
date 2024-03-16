@@ -56,9 +56,9 @@ class DatabaseService {
   // creating a group
   Future createGroup(String userName, String id, String groupName) async {
     DocumentReference groupDocumentReference = await groupCollection.add({
-      "groupName": groupName,
+      "groupName": groupName.toLowerCase(),
       "groupIcon": "",
-      "admin": "${id}_$userName",
+      "admin": "${id}_${userName.toLowerCase()}",
       "members": [],
       "groupId": "",
       "recentMessage": "",
@@ -104,7 +104,7 @@ class DatabaseService {
 
   // search
   searchByName(String groupName) {
-    return groupCollection.where("groupName", isEqualTo: groupName).get();
+    return groupCollection.where("groupName", isEqualTo: groupName.toString().toLowerCase()).get();
   }
 
   // function -> bool
