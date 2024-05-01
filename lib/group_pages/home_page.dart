@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:studybuddyapp/group_pages/search_page.dart';
-import 'package:studybuddyapp/helper/helper_function.dart';
 import 'package:studybuddyapp/service/auth_service.dart';
 import 'package:studybuddyapp/service/database_service.dart';
 import 'package:studybuddyapp/widgets/drawer.dart';
-import 'package:studybuddyapp/widgets/group_tile.dart';
 import 'package:studybuddyapp/widgets/widgets.dart';
+
+import '../widgets/group_tile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

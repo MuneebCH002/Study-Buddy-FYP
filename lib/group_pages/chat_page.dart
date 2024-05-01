@@ -8,9 +8,9 @@ import 'package:profanity_filter/profanity_filter.dart';
 import 'package:studybuddyapp/group_pages/group_info.dart';
 import 'package:studybuddyapp/helper/helper_function.dart';
 import 'package:studybuddyapp/service/database_service.dart';
-import 'package:studybuddyapp/widgets/chat_screen.dart';
-import 'package:studybuddyapp/widgets/message_tile.dart';
 import 'package:studybuddyapp/widgets/widgets.dart';
+
+import '../widgets/chat_screen.dart';
 
 class ChatPage extends StatefulWidget {
   final String groupId;
