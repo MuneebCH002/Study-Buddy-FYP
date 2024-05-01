@@ -47,8 +47,10 @@ class _MessageTileState extends State<MessageTile> {
           Navigator.pop(context);
         }
       },
-      onLongPress: () {
-       if (widget.sentByMe||checkIsUserAdmin()) {
+      onLongPress: ()async {
+        bool value=await checkIsUserAdmin();
+        print("is user admin"+value.toString());
+       if (widget.sentByMe) {
           showDialog(
               context: context,
               builder: (context) {
@@ -90,6 +92,48 @@ class _MessageTileState extends State<MessageTile> {
                 );
               });
         }
+       else if(await checkIsUserAdmin()){
+         showDialog(
+             context: context,
+             builder: (context) {
+               return AlertDialog(
+                 title: const Text("Delete Message"),
+                 content: const Text("Do you want to delete this message?"),
+                 actions: [
+                   TextButton(
+                       onPressed: () {
+                         FirebaseFirestore.instance
+                             .collection('groups')
+                             .doc(widget.groupId)
+                             .collection('messages')
+                             .where('sender_id',
+                             isEqualTo:
+                             FirebaseAuth.instance.currentUser!.uid)
+                             .where('message')
+                             .get()
+                             .then((value) {
+                           Navigator.pop(context);
+                           value.docs.forEach((msg) {
+                             if (msg['message'] == widget.message) {
+                               msg.reference.delete().then((value) {
+                                 Fluttertoast.showToast(
+                                     msg: 'Message deleted successfully!',
+                                     backgroundColor: Colors.green);
+                               });
+                             }
+                           });
+                         });
+                       },
+                       child: const Text('Yes')),
+                   TextButton(
+                       onPressed: () {
+                         Navigator.pop(context);
+                       },
+                       child: const Text('No')),
+                 ],
+               );
+             });
+       }
 
       },
       child: Container(
@@ -150,7 +194,7 @@ class _MessageTileState extends State<MessageTile> {
                 ),
               Text(widget.message,
                   textAlign: TextAlign.start,
-                  style: const TextStyle(fontSize: 16, color: Colors.white)),
+                  style: const TextStyle(fontSize: 12, color: Colors.white)),
               Container(
                 width: MediaQuery.sizeOf(context).width*0.2,
                 alignment: Alignment.bottomRight,
@@ -171,8 +215,9 @@ class _MessageTileState extends State<MessageTile> {
       });
     }
   }
-  checkIsUserAdmin()async{
+  Future<bool> checkIsUserAdmin()async{
     await gettingUserData();
-    return widget.admin.toLowerCase()==userName!.toLowerCase();
+    bool flag= widget.admin.split('_')[1].toString()==userName!.toLowerCase();
+    return flag;
   }
 }

@@ -201,31 +201,29 @@ class _ChatPageState extends State<ChatPage> {
         "sender": widget.userName,
         "time": DateTime.timestamp(),
       };
-
-
       DatabaseService().sendMessage(widget.groupId, chatMessageMap);
       setState(() {
         messageController.clear();
         fileUrl='';
       });
     }
-    else if(messageController.text.isEmpty){
-      Map<String, dynamic> chatMessageMap = {
-        'sender_id':FirebaseAuth.instance.currentUser!.uid.toString(),
-        'message_id':'${FirebaseAuth.instance.currentUser!.uid}_${widget.userName}',
-        'type':'file',
-        'fileUrl':fileUrl,
-        "message": messageController.text,
-        "sender": widget.userName,
-        "time": DateTime.timestamp(),
-      };
-
-      DatabaseService().sendMessage(widget.groupId, chatMessageMap);
-      setState(() {
-        messageController.clear();
-        fileUrl='';
-      });
-    }
+    // else if(messageController.text.isEmpty){
+    //   Map<String, dynamic> chatMessageMap = {
+    //     'sender_id':FirebaseAuth.instance.currentUser!.uid.toString(),
+    //     'message_id':'${FirebaseAuth.instance.currentUser!.uid}_${widget.userName}',
+    //     'type':'file',
+    //     'fileUrl':fileUrl,
+    //     "message": messageController.text,
+    //     "sender": widget.userName,
+    //     "time": DateTime.timestamp(),
+    //   };
+    //
+    //   DatabaseService().sendMessage(widget.groupId, chatMessageMap);
+    //   setState(() {
+    //     messageController.clear();
+    //     fileUrl='';
+    //   });
+    // }
   }
 
   String? validateMessage(String? value) {
