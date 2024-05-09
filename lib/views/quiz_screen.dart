@@ -222,7 +222,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                           if (myquestions.isLocked) {
                                             if (questionOption ==
                                                 myquestions
-                                                    .selectedWiidgetOption) {
+                                                    .selectedWidgetOption) {
                                               color = questionOption.isCorrect
                                                   ? Colors.green
                                                   : Colors.red;
@@ -239,13 +239,13 @@ class _QuizScreenState extends State<QuizScreen> {
                                                 setState(() {
                                                   myquestions.isLocked = true;
                                                   myquestions
-                                                          .selectedWiidgetOption =
+                                                          .selectedWidgetOption =
                                                       questionOption;
                                                 });
 
                                                 isLocked = myquestions.isLocked;
                                                 if (myquestions
-                                                    .selectedWiidgetOption
+                                                    .selectedWidgetOption
                                                     .isCorrect) {
                                                   score++;
                                                 }

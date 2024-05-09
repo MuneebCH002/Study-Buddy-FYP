@@ -1,12 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:studybuddyapp/firebase_options.dart';
 import 'package:studybuddyapp/helper/helper_function.dart';
+import 'package:studybuddyapp/service/notification_service.dart';
 import 'package:studybuddyapp/shared/constants.dart';
 import 'group_pages/auth/login_page.dart';
 import 'group_pages/home_page.dart';
@@ -17,6 +22,15 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await checkNotificationAllow();
+  // await NotificationServices.initializeNotification();
+  await AndroidFlutterLocalNotificationsPlugin().requestExactAlarmsPermission();
+  NotificationService notificationService=NotificationService();
+  notificationService.initializeNotifications();
+   tz.initializeTimeZones();
+   tz.setLocalLocation(tz.getLocation('Asia/Karachi'));
+
+
   if (kIsWeb) {
     await Firebase.initializeApp(
         options: FirebaseOptions(
@@ -33,6 +47,7 @@ void main() async {
 bool isSignedIn=false;
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
 
 
   @override
@@ -119,5 +134,10 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-
-// LoginPage and HomePage widgets remain the same as in your initial code
+checkNotificationAllow()async{
+  await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+    if(!isAllowed){
+      AwesomeNotifications().requestPermissionToSendNotifications();
+    }
+  });
+}

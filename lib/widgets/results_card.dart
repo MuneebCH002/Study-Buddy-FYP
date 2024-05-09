@@ -3,18 +3,28 @@ import 'package:flutter/material.dart';
 import 'dotted_lines.dart';
 
 class ResultsCard extends StatelessWidget {
-  const ResultsCard({
+   ResultsCard({
     super.key,
+    required this.score,
+    required this.totalScore,
     required this.roundedPercentageScore,
     required this.bgColor3,
   });
 
   final int roundedPercentageScore;
   final Color bgColor3;
-
+  final int score;
+  final int totalScore;
+  String message='';
   @override
   Widget build(BuildContext context) {
     const Color bgColor3 = Color(0xFF5170FD);
+    if(score>=50){
+      message='Congratulations!,';
+    }
+    else if(score>=0&&score<50){
+      message='Try Again!';
+    }
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.888,
       height: MediaQuery.of(context).size.height * 0.568,
@@ -39,23 +49,18 @@ class ResultsCard extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             for (var ii = 0;
-                                ii < "Congratulations!,".length;
+                                ii < message.length;
                                 ii++) ...[
                               TextSpan(
-                                text: "Congratulations!,"[ii],
+                                text: message[ii],
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
-                                    .copyWith(fontSize: 12 + ii.toDouble()),
+                                    .copyWith(fontSize: 16 + ii.toDouble()),
                               ),
                             ],
-                            //m'adamfo(Twi) - my friend
                             TextSpan(
-                              text: "  m'adamfo\n You Scored  \n",
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                            TextSpan(
-                              text: "$roundedPercentageScore%",
+                              text: "\n$roundedPercentageScore%",
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge!
@@ -80,7 +85,7 @@ class ResultsCard extends StatelessWidget {
                             ? Column(
                                 children: [
                                   Text(
-                                    "You have Earned this Trophy",
+                                    "You have Earned $score out of $totalScore points",
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyLarge!
@@ -88,7 +93,7 @@ class ResultsCard extends StatelessWidget {
                                           fontWeight: FontWeight.w400,
                                         ),
                                   ),
-                                  Image.asset("assets/bouncy-cup.gif",
+                                  Image.asset("assets/quiz_assets/bouncy-cup.gif",
                                       fit: BoxFit.fill,
                                       height:
                                           MediaQuery.of(context).size.height *
@@ -98,7 +103,7 @@ class ResultsCard extends StatelessWidget {
                             : Column(
                                 children: [
                                   Text(
-                                    "I know You can do better!!",
+                                    "You can do better!!",
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyLarge!
@@ -106,7 +111,7 @@ class ResultsCard extends StatelessWidget {
                                           fontWeight: FontWeight.w600,
                                         ),
                                   ),
-                                  Image.asset("assets/sad.png",
+                                  Image.asset("assets/quiz_assets/sad.png",
                                       fit: BoxFit.fill,
                                       height:
                                           MediaQuery.of(context).size.height *

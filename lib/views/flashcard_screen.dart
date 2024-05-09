@@ -74,14 +74,10 @@ class _NewCardState extends State<NewCard> {
                 height: MediaQuery.of(context).size.height * 0.60,
                 child: AppinioSwiper(
                   loop: true,
+
                   backgroundCardCount: 2,
                   swipeOptions: const SwipeOptions.all(),
                   controller: controller,
-                  onSwipeEnd: (a,b,swipperEnd){
-
-                  },
-                  onSwipeBegin: _swipe,
-                  onEnd: _onEnd,
                   cardCount: randomQuestions.length,
                   cardBuilder: (BuildContext context, int index) {
                     var cardIndex = randomQuestions[index];
@@ -119,34 +115,34 @@ class _NewCardState extends State<NewCard> {
                       ),
                     ),
                   ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(cardColor),
-                      fixedSize: MaterialStateProperty.all(
-                        Size(MediaQuery.sizeOf(context).width * 0.85, 30),
-                      ),
-                      elevation: MaterialStateProperty.all(4),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => QuizScreen(
-                            questionlenght: randomQuestions,
-                            optionsList: randomOptions,
-                            topicType: widget.topicName,
-                          ),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      "Start Quiz",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  )
+                  // ElevatedButton(
+                  //   style: ButtonStyle(
+                  //     backgroundColor: MaterialStateProperty.all(cardColor),
+                  //     fixedSize: MaterialStateProperty.all(
+                  //       Size(MediaQuery.sizeOf(context).width * 0.85, 30),
+                  //     ),
+                  //     elevation: MaterialStateProperty.all(4),
+                  //   ),
+                  //   onPressed: () {
+                  //     Navigator.of(context).pushReplacement(
+                  //       MaterialPageRoute(
+                  //         builder: (context) => QuizScreen(
+                  //           questionlenght: randomQuestions,
+                  //           optionsList: randomOptions,
+                  //           topicType: widget.topicName,
+                  //         ),
+                  //       ),
+                  //     );
+                  //   },
+                  //   child: const Text(
+                  //     "Start Quiz",
+                  //     style: TextStyle(
+                  //       color: Colors.white,
+                  //       fontSize: 15,
+                  //       fontWeight: FontWeight.bold,
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ],
@@ -182,39 +178,3 @@ Map<dynamic, dynamic> getRandomQuestionsAndOptions(
   return Map.fromIterables(randomQuestions, randomOptions);
 }
 
-// List<dynamic> getRandomQuestions(List<dynamic> allQuestions, int count) {
-//   if (count >= allQuestions.length) {
-//     return List.from(allQuestions);
-//   }
-//   List<dynamic> randomQuestions = [];
-
-//   List<int> indexes = List.generate(allQuestions.length, (index) => index);
-//   final random = Random();
-
-//   while (randomQuestions.length < count) {
-//     final randomIndex = random.nextInt(indexes.length);
-//     final selectedQuestionIndex = indexes[randomIndex];
-//     final selectedQuestion = allQuestions[selectedQuestionIndex];
-//     randomQuestions.add(selectedQuestion);
-
-//     indexes.removeAt(randomIndex);
-//   }
-//   return randomQuestions;
-// }
-
-void _swipe(int index,b, direction) {
-  print("the card was swiped to the: ${direction.name}");
-  print(index);
-}
-
-void _unswipe(bool unswiped) {
-  if (unswiped) {
-    print("SUCCESS: card was unswiped");
-  } else {
-    print("FAIL: no card left to unswipe");
-  }
-}
-
-void _onEnd() {
-  print("end reached!");
-}

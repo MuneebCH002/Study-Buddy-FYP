@@ -1,22 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:profanity_filter/profanity_filter.dart';
 import 'package:studybuddyapp/group_pages/group_info.dart';
-import 'package:studybuddyapp/helper/helper_function.dart';
 import 'package:studybuddyapp/service/database_service.dart';
+import 'package:studybuddyapp/views/home_screen.dart';
+import 'package:studybuddyapp/views/quiz_score_screen.dart';
 import 'package:studybuddyapp/widgets/widgets.dart';
 
+import '../models/flutter_topics_model.dart';
+import '../views/quiz_screen.dart';
 import '../widgets/chat_screen.dart';
 
 class ChatPage extends StatefulWidget {
   final String groupId;
   final String groupName;
-  final String userName;
-  const ChatPage(
+   String userName;
+   ChatPage(
       {Key? key,
       required this.groupId,
       required this.groupName,
@@ -78,6 +80,11 @@ class _ChatPageState extends State<ChatPage> {
         ),),
         backgroundColor: Theme.of(context).primaryColor,
         actions: [
+          IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context){
+              return QuizScoresScreen();
+            }));
+          }, icon: const Icon(Icons.score_outlined,color: Colors.white,)),
           IconButton(
               onPressed: () {
                 nextScreen(
@@ -88,7 +95,7 @@ class _ChatPageState extends State<ChatPage> {
                       adminName: admin,
                     ));
               },
-              icon: const Icon(Icons.info,color: Colors.white,))
+              icon: const Icon(Icons.info,color: Colors.white,)),
         ],
       ),
       body: Column(
@@ -101,7 +108,7 @@ class _ChatPageState extends State<ChatPage> {
             child: Container(
               // height: fileUrl==''?MediaQuery.sizeOf(context).height*0.18:MediaQuery.sizeOf(context).height*0.2,
               padding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              const EdgeInsets.symmetric(horizontal: 5, vertical: 18),
               width: MediaQuery.of(context).size.width,
               color: Colors.grey.withOpacity(0.8 ),
               child: Form(
@@ -113,7 +120,17 @@ class _ChatPageState extends State<ChatPage> {
                     if(fileUrl!='')
                       const Text('File Uploaded! Enter title to send.'),
                     Row(children: [
-                      IconButton(onPressed: ()async{
+                        InkWell(onTap:(){
+                          if(admin.split('_')[1].toString()==widget.userName.toLowerCase()) {
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return  HomePageQuiz(groupId: widget.groupId,);
+                            }));
+                          }
+                          else{
+                            _attemptQuiz();
+                          }
+                        } , child:Image.asset('assets/quizIcon.png',color: Theme.of(context).primaryColor,height: 40,)),
+                      InkWell(onTap: ()async{
                         showDialog(context: context, builder: (context){
                           return const Center(
                             child: CircularProgressIndicator(),
@@ -130,7 +147,8 @@ class _ChatPageState extends State<ChatPage> {
                          this.fileUrl=fileUrl!;
                        });
                        Navigator.pop(context,false);
-                      }, icon: Icon(Icons.file_present_rounded,size: 45,color:Theme.of(context).primaryColor,)),
+                      }, child: Image.asset('assets/upload_file_svg.png',height: 40,color:Theme.of(context).primaryColor,)),
+                      const SizedBox(width: 5,),
                       Expanded(
                         child: TextFormField(
                           scrollPhysics: const AlwaysScrollableScrollPhysics(),
@@ -266,4 +284,80 @@ class _ChatPageState extends State<ChatPage> {
         r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])');
     return rx.hasMatch(string);
   }
+  Future<DocumentSnapshot?> getLatestActiveQuiz() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('groups')
+          .doc(widget.groupId)
+          .collection('quizzes')
+          .where('status', isEqualTo: 'active')
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first;
+      } else {
+        // No active quiz found
+        return null;
+      }
+    } catch (error) {
+      // Handle errors
+      print('Error fetching latest active quiz: $error');
+      return null;
+    }
+  }
+
+
+  Future<void> _attemptQuiz() async {
+    try {
+      // Get the current user's ID (assuming you have implemented user authentication)
+
+
+
+          // The user has not attempted the quiz yet
+          DocumentSnapshot<Object?>? latestActiveQuiz = await getLatestActiveQuiz();
+          if (latestActiveQuiz != null) {
+            if (latestActiveQuiz.exists) {
+              Map<String, dynamic> quizDataMap = latestActiveQuiz.data() as Map<String, dynamic>;
+              FlutterTopics quizData = FlutterTopics.fromMap(quizDataMap);
+              String? userId = getCurrentUserId().toString(); // Implement this function to get the current user's ID
+
+              QuerySnapshot quizAttemptsSnapshot = await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(userId)
+                  .collection('quiz_attempts')
+                  .where('topicName', isEqualTo:quizData.topicName ) // Replace 'your_quiz_topic' with the actual quiz topic
+                  .get();
+              // Navigate to the quiz screen
+              if (quizAttemptsSnapshot.docs.isNotEmpty) {
+                // The user has already attempted the quiz
+                Fluttertoast.showToast(msg: 'You have already attempted this quiz!',backgroundColor: Colors.red);
+              }
+              else {
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuizScreen(
+                    topicType: quizData.topicName,
+                    questionlenght: quizData.topicQuestions,
+                    optionsList: quizData.topicQuestions.map((question) => question.options).toList(),
+                  ),
+                ),
+              );
+              }
+            } else {
+              Fluttertoast.showToast(msg: 'No Quiz Started yet!');
+            }
+          }
+
+    } catch (error) {
+      // Handle errors
+    }
+  }
+
+  Future<String> getCurrentUserId()async{
+    return FirebaseAuth.instance.currentUser!.uid;
+  }
+
+
+
 }

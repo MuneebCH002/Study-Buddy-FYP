@@ -11,12 +11,12 @@ class Stream_note extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: Firestore_Datasource().stream(done),
+        stream: FirestoreDatasource().stream(done),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const CircularProgressIndicator();
           }
-          final noteslist = Firestore_Datasource().getNotes(snapshot);
+          final noteslist = FirestoreDatasource().getNotes(snapshot);
           return ListView.builder(
             shrinkWrap: true,
             itemBuilder: (context, index) {
@@ -24,7 +24,7 @@ class Stream_note extends StatelessWidget {
               return Dismissible(
                 key: UniqueKey(),
                 onDismissed: (direction) {
-                  Firestore_Datasource().delet_note(note.id);
+                  FirestoreDatasource().delete_note(note.id);
                 },
                 background: Container(
                   color:

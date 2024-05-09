@@ -4,22 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import '../model/notes_model.dart';
 
-class Firestore_Datasource {
+class FirestoreDatasource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  // Future<bool> CreateUser(String email, String name) async {
-  //   try {
-  //     await _firestore
-  //         .collection('users')
-  //         .doc(_auth.currentUser!.uid)
-  //         .set({"id": _auth.currentUser!.uid, "email": email, "name": name});
-  //     return true;
-  //   } catch (e) {
-  //     print(e);
-  //     return true;
-  //   }
-  // }
 
   Future<bool> AddNote(
       String subtitle, String title, int image, DateTime date) async {
@@ -112,7 +99,7 @@ class Firestore_Datasource {
     }
   }
 
-  Future<bool> delet_note(String uuid) async {
+  Future<bool> delete_note(String uuid) async {
     try {
       await _firestore
           .collection('users')

@@ -1,17 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'message_tile.dart';
 
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen(
+   ChatScreen(
       {super.key,
       required this.groupId,
       required this.userName,
       required this.chats,
       required this.adminName});
   final String groupId;
-  final String userName;
+  String userName;
   final String adminName;
   final chats;
   @override
@@ -107,4 +109,5 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
+
 }

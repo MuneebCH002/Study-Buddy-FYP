@@ -1,9 +1,10 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:studybuddyapp/widgets/drawer.dart';
+import '../../service/notification_controller.dart';
 import '../../shared/colors.dart';
 import '../widgets/stream_note.dart';
 import 'add_note_screen.dart';
@@ -101,11 +102,10 @@ class _SchedulerState extends State<Scheduler> {
           .where('isDone', isEqualTo: false)
           .get();
 
-      // Check if any documents with 'isDone' set to true exist
       return snapshot.docs.isNotEmpty;
     } catch (e) {
       print('Error checking notes: $e');
-      return false; // Return false in case of any error
+      return false;
     }
   }
 }

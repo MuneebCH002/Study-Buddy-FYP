@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:studybuddyapp/scheduler/data/firestor.dart';
+import 'package:studybuddyapp/service/notification_service.dart';
+import 'package:timezone/timezone.dart' as tz;
+
 
 import '../../shared/colors.dart';
 
@@ -28,16 +31,10 @@ class _Add_creenState extends State<Add_creen> {
         context: context,
         initialTime: TimeOfDay.fromDateTime(selectedDateTime),
       );
-
-      if (pickedTime != null) {
+      print("picked time is: ${pickedTime!.hour}: ${pickedTime.minute}");
+      if (pickedTime!=null) {
         setState(() {
-          selectedDateTime = DateTime(
-            pickedDate.year,
-            pickedDate.month,
-            pickedDate.day,
-            pickedTime.hour,
-            pickedTime.minute,
-          );
+          selectedDateTime =DateTime(pickedDate.year,pickedDate.month,pickedDate.day,pickedTime.hour,pickedTime.minute);
         });
       }
     }
@@ -171,13 +168,14 @@ class _Add_creenState extends State<Add_creen> {
             minimumSize: const Size(170, 48),
           ),
           onPressed: () {
-            Firestore_Datasource().AddNote(
+            FirestoreDatasource().AddNote(
               subtitle.text,
               title.text,
               indexx,
               selectedDateTime,
             );
-
+            print('selectedDateTime $selectedDateTime');
+             NotificationService().scheduleNotification(title.text, subtitle.text,selectedDateTime);
             Fluttertoast.showToast(
                 msg: "Task Created Successfully",
                 toastLength: Toast.LENGTH_LONG,

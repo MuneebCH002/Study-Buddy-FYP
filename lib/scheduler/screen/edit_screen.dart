@@ -154,7 +154,7 @@ class _Edit_ScreenState extends State<Edit_Screen> {
             minimumSize: const Size(170, 48),
           ),
           onPressed: () {
-            Firestore_Datasource().Update_Note(widget._note.id, indexx,
+            FirestoreDatasource().Update_Note(widget._note.id, indexx,
                 title!.text, subtitle!.text, selectedDateTime);
             Navigator.pop(context);
           },
