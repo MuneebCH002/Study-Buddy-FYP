@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:studybuddyapp/service/notification_service.dart';
 
 class DatabaseService {
   final String? uid;
@@ -78,14 +78,32 @@ class DatabaseService {
   }
 
   // getting the chats
-  Stream<QuerySnapshot> getMessageStream(String groupId) {
-    return FirebaseFirestore.instance
-        .collection('groups')
-        .doc(groupId)
-        .collection('messages')
-        .orderBy('time')
-        .snapshots();
-  }
+  // Stream<QuerySnapshot> getMessageStream(String groupId) {
+  //   return FirebaseFirestore.instance
+  //       .collection('groups')
+  //       .doc(groupId)
+  //       .collection('messages')
+  //       .orderBy('time')
+  //       .snapshots()
+  //       .map((snapshot) {
+  //     snapshot.docChanges.forEach((change) {
+  //       if (change.type == DocumentChangeType.added) {
+  //         var newMessage = change.doc.data();
+  //         String messageContent = newMessage!['content'];
+  //         NotificationService().sendNotification('New Message', messageContent);
+  //       }
+  //     });
+  //     return snapshot;
+  //   });
+  // }
+  // Stream<QuerySnapshot> getMessageStream(String groupId) {
+  //   return FirebaseFirestore.instance
+  //       .collection('groups')
+  //       .doc(groupId)
+  //       .collection('messages')
+  //       .orderBy('time')
+  //       .snapshots();
+  // }
 
   Future getGroupAdmin(String groupId) async {
     DocumentReference d = groupCollection.doc(groupId);

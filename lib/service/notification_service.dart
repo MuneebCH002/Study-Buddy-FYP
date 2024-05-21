@@ -16,23 +16,38 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  void sendNotification(
-    String title,
-    String body,
-  ) async {
-    Random random = Random();
+  void sendNotification(String title, String body) async {
+    const int notificationId = 0;
 
     AndroidNotificationDetails androidNotificationDetails =
-        const AndroidNotificationDetails(
-            'schedule_channel_0001', 'schedule_task',
-            importance: Importance.max, priority: Priority.high);
+    const AndroidNotificationDetails(
+      'schedule_channel_0001',
+      'schedule_task',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
 
     NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
+    NotificationDetails(android: androidNotificationDetails);
 
     await flutterLocalNotificationsPlugin.show(
-        random.nextInt(1000000) + 1, title, body, notificationDetails);
+        notificationId, title, body, notificationDetails);
   }
+
+  // void sendNotification(String title, String body) async {
+  //   Random random = Random();
+  //
+  //   AndroidNotificationDetails androidNotificationDetails =
+  //   const AndroidNotificationDetails(
+  //       'schedule_channel_0001', 'schedule_task',
+  //       importance: Importance.max, priority: Priority.high);
+  //
+  //   NotificationDetails notificationDetails =
+  //   NotificationDetails(android: androidNotificationDetails);
+  //
+  //   await flutterLocalNotificationsPlugin.show(
+  //       random.nextInt(1000000) + 1, title, body, notificationDetails);
+  // }
 
   void scheduleNotification(String title, String body, DateTime time) async {
     Random random = Random();

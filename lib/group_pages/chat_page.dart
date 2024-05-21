@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:studybuddyapp/views/quiz_score_screen.dart';
 import 'package:studybuddyapp/widgets/widgets.dart';
 
 import '../models/flutter_topics_model.dart';
+import '../service/notification_service.dart';
 import '../views/quiz_screen.dart';
 import '../widgets/chat_screen.dart';
 
@@ -39,18 +42,62 @@ class _ChatPageState extends State<ChatPage> {
   String fileExtension='';
   String messageType='';
   // int _maxLines = 1;
+  NotificationService? notificationService;
+  StreamSubscription<QuerySnapshot>? messageSubscription;
+  int retryCount = 0;
+  final int maxRetries = 5;
+  final Duration retryDelay = const Duration(seconds: 5);
 
   List<String> customWords=['love','idiot','bastard','moron','donkey','hate','fool','mingle','movie','noodles','distraction','diversion'];
 
   @override
   void initState() {
     getChatandAdmin();
+    notificationService = NotificationService();
+    subscribeToMessages(widget.groupId);
     super.initState();
   }
+  void subscribeToMessages(String groupId) {
+    messageSubscription = getMessageStream(groupId).listen((snapshot) {
+      if (snapshot.docChanges.isNotEmpty) {
+        var latestChange = snapshot.docChanges.last;
+        if (latestChange.type == DocumentChangeType.added) {
+          var newMessage = latestChange.doc.data() as Map<String, dynamic>?;
+          if (newMessage != null) {
+            String messageContent = newMessage['message'];
+            notificationService!.sendNotification('New Message', messageContent);
+          }
+        }
+      }
+    }, onError: (error) {
+      handleStreamError(error, groupId);
+    });
+  }
+
+
+  void handleStreamError(error, String groupId) {
+    if (retryCount < maxRetries) {
+      retryCount++;
+      print('Stream error: $error. Retrying in ${retryDelay.inSeconds} seconds...');
+      Future.delayed(retryDelay, () => subscribeToMessages(groupId));
+    } else {
+      print('Max retry attempts reached. Could not reconnect to Firestore.');
+    }
+  }
+
+  Stream<QuerySnapshot> getMessageStream(String groupId) {
+    return FirebaseFirestore.instance
+        .collection('groups')
+        .doc(groupId)
+        .collection('messages')
+        .orderBy('time')
+        .snapshots();
+  }
+
 
   getChatandAdmin(){
     setState(() {
-      chats=DatabaseService().getMessageStream(widget.groupId);
+      chats=getMessageStream(widget.groupId);
       // print(DatabaseService().getMessageStream(widget.groupId))
     });
     DatabaseService().getGroupAdmin(widget.groupId).then((val) {
