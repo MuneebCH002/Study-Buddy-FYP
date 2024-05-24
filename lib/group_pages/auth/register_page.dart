@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -266,6 +269,10 @@ class _RegisterPageState extends State<RegisterPage> {
           .registerUserWithEmailandPassword(fullName, email, password,phoneNum,ppUrl)
           .then((value) async {
         if (value == true) {
+          String userId = FirebaseAuth.instance.currentUser!.uid;
+
+          // Store the FCM token
+          await storeToken(userId);
           await HelperFunctions.saveUserLoggedInStatus(true);
           await HelperFunctions.saveUserEmailSF(email);
           await HelperFunctions.saveUserNameSF(fullName);
@@ -278,6 +285,17 @@ class _RegisterPageState extends State<RegisterPage> {
           });
         }
       });
+    }
+  }
+  Future<void> storeToken(String userId) async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    String? token = await messaging.getToken();
+
+    if (token != null) {
+      await FirebaseFirestore.instance.collection('users').doc(userId).set({
+        'fcmToken': token,
+
+      } ,SetOptions(merge: true));
     }
   }
 }

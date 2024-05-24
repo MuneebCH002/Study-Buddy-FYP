@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
@@ -22,6 +25,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   await checkNotificationAllow();
   // await NotificationServices.initializeNotification();
   await AndroidFlutterLocalNotificationsPlugin().requestExactAlarmsPermission();
@@ -82,6 +87,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 5), () {
       checkLoggedInStatus(); // Check logged-in status after 5 seconds
     });
+    // storeToken(FirebaseAuth.instance.currentUser!.uid);
   }
 
   void checkLoggedInStatus() async {

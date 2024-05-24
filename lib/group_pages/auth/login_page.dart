@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:studybuddyapp/group_pages/auth/register_page.dart';
@@ -190,6 +191,7 @@ class _LoginPageState extends State<LoginPage> {
           // saving the values to our shared preferences
           await HelperFunctions.saveUserLoggedInStatus(true);
           await HelperFunctions.saveUserEmailSF(email);
+          await storeToken(FirebaseAuth.instance.currentUser!.uid);
           // await HelperFunctions.saveUserNameSF(snapshot.docs[0]['fullName']);
           nextScreenReplace(context, const HomePage());
         } else {
@@ -201,4 +203,15 @@ class _LoginPageState extends State<LoginPage> {
       });
     }
   }
+  Future<void> storeToken(String userId) async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    String? token = await messaging.getToken();
+
+    if (token != null) {
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
+        'fcmToken': token,
+      });
+    }
+  }
 }
+
