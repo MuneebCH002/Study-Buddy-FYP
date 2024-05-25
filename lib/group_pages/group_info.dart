@@ -288,17 +288,19 @@ class _GroupInfoState extends State<GroupInfo> {
     final store=FirebaseFirestore.instance;
     var user=await store.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
     var admin=await store.collection('groups').doc(widget.groupId).get();
-    var userName=FirebaseAuth.instance.currentUser!.uid+'_'+user.get('fullName');
+    var userName=FirebaseAuth.instance.currentUser!.uid+'_'+user.get('fullName').toString().toLowerCase();
+    print('username'+userName);
+    print('admin name ${admin.get('admin')}');
     if(userName==admin.get('admin')){
       setState(() {
         userIsAdmin= true;
-
+        print("${userIsAdmin}user is admin");
       });
     }
     else{
       setState(() {
         userIsAdmin= false;
-
+        print("${userIsAdmin}user is admin");
       });
     }
   }

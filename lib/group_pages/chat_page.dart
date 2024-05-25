@@ -174,7 +174,7 @@ class _ChatPageState extends State<ChatPage> {
           IconButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return QuizScoresScreen();
+                return QuizScoresScreen(groupId: widget.groupId,);
               }));
             },
             icon: const Icon(Icons.score_outlined, color: Colors.white),
@@ -431,13 +431,12 @@ class _ChatPageState extends State<ChatPage> {
       if (latestActiveQuiz != null && latestActiveQuiz.exists) {
         Map<String, dynamic> quizDataMap = latestActiveQuiz.data() as Map<String, dynamic>;
         FlutterTopics quizData = FlutterTopics.fromMap(quizDataMap);
-        String? userId = getCurrentUserId().toString();
-
+        String? userId = await getCurrentUserId();
         QuerySnapshot quizAttemptsSnapshot = await FirebaseFirestore.instance
             .collection('users')
             .doc(userId)
             .collection('quiz_attempts')
-            .where('topicName', isEqualTo: quizData.topicName)
+            .where('quiz_topic', isEqualTo: quizData.topicName.toLowerCase())
             .get();
 
         if (quizAttemptsSnapshot.docs.isNotEmpty) {
@@ -449,7 +448,7 @@ class _ChatPageState extends State<ChatPage> {
               builder: (context) => QuizScreen(
                 topicType: quizData.topicName,
                 questionlenght: quizData.topicQuestions,
-                optionsList: quizData.topicQuestions.map((question) => question.options).toList(),
+                optionsList: quizData.topicQuestions.map((question) => question.options).toList(), groupId: widget.groupId,
               ),
             ),
           );

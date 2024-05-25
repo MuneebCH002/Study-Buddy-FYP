@@ -19,10 +19,10 @@ class ResultsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const Color bgColor3 = Color(0xFF5170FD);
-    if(score>=50){
+    if(roundedPercentageScore>=50){
       message='Congratulations!,';
     }
-    else if(score>=0&&score<50){
+    else if(roundedPercentageScore>=0&&roundedPercentageScore<50){
       message='Try Again!';
     }
     return SizedBox(

@@ -9,10 +9,11 @@ class ResultsScreen extends StatelessWidget {
       {super.key,
       required this.score,
       required this.totalQuestions,
-      required this.whichTopic});
+      required this.whichTopic, required this.groupId});
   final int score;
   final int totalQuestions;
   final String whichTopic;
+  final String groupId;
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +49,17 @@ class ResultsScreen extends StatelessWidget {
                     'score': score,
                     'total_questions': totalQuestions,
                     'attempted': true,
+                    'group_id':groupId
                   });
+                  print('added quiz_attempts in user collection');
 
                   await FirebaseFirestore.instance.collection('quiz_attempts').add({
                     'userId':userId,
                     'quiz_topic': whichTopic,
                     'score': score,
+                    'group_id':groupId
                   });
+                  print('added quiz_attempts in quiz_attempts collection');
 
                   // Navigate back to the previous screen
                   Navigator.popUntil(context, (route) => route.isFirst);
@@ -143,13 +148,17 @@ class ResultsScreen extends StatelessWidget {
                       'score': score,
                       'total_questions': totalQuestions,
                       'attempted': true,
+                      'group_id':groupId
                     });
+                    print('added quiz_attempts in user collection');
 
                     await FirebaseFirestore.instance.collection('quiz_attempts').add({
                       'userId':userId,
                       'quiz_topic': whichTopic,
                       'score': score,
+                      'group_id':groupId
                     });
+                    print('added quiz_attempts in quiz_attempts collection');
 
                     // Navigate back to the previous screen
                     Navigator.popUntil(context, (route) => route.isFirst);

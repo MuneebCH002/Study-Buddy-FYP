@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuizScoresScreen extends StatelessWidget {
+  const QuizScoresScreen({super.key,required this.groupId});
+
+ final String groupId;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -9,7 +13,7 @@ class QuizScoresScreen extends StatelessWidget {
         title: const Text('Quiz Scores'),
       ),
       body: FutureBuilder<QuerySnapshot>(
-        future: FirebaseFirestore.instance.collection('quiz_attempts').get(),
+        future: FirebaseFirestore.instance.collection('quiz_attempts').where('group_id',isEqualTo: groupId).get(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

@@ -47,7 +47,7 @@ class _MyProgressIndicatorState extends State<MyProgressIndicator> {
         builder: (context) => QuizScreen(
           questionlenght: widget.questionlenght,
           optionsList: widget.optionsList,
-          topicType: widget.topicType,
+          topicType: widget.topicType, groupId: '',
         ),
       ),
     );
