@@ -15,6 +15,7 @@ class MessageTile extends StatefulWidget {
   final String fileUrl;
   final String admin;
   final String fileExtension;
+  final String senderId;
   final DateTime time;
 
   const MessageTile(
@@ -24,7 +25,7 @@ class MessageTile extends StatefulWidget {
       required this.sentByMe,
       required this.messageType,
       required this.fileUrl,
-      required this.groupId, required this.admin, required this.fileExtension, required this.time})
+      required this.groupId, required this.admin, required this.fileExtension, required this.time, required this.senderId})
       : super(key: key);
 
   @override
@@ -74,11 +75,14 @@ class _MessageTileState extends State<MessageTile> {
                             value.docs.forEach((msg) {
                               if (msg['message'] == widget.message) {
                                 msg.reference.delete().then((value) {
+                                  print('delete status true');
                                   Fluttertoast.showToast(
                                       msg: 'Message deleted successfully!',
                                       backgroundColor: Colors.green);
+
                                 });
                               }
+
                             });
                           });
                         },
@@ -107,8 +111,7 @@ class _MessageTileState extends State<MessageTile> {
                              .doc(widget.groupId)
                              .collection('messages')
                              .where('sender_id',
-                             isEqualTo:
-                             FirebaseAuth.instance.currentUser!.uid)
+                             isEqualTo:widget.senderId)
                              .where('message')
                              .get()
                              .then((value) {

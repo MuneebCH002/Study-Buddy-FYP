@@ -34,6 +34,7 @@ class _SearchPageState extends State<SearchPage> {
     await HelperFunctions.getUserNameFromSF().then((value) {
       setState(() {
         userName = value!;
+        print("userName is: $userName");
       });
     });
     user = FirebaseAuth.instance.currentUser;
@@ -172,7 +173,7 @@ class _SearchPageState extends State<SearchPage> {
       trailing: InkWell(
         onTap: () async {
           await DatabaseService(uid: user!.uid)
-              .toggleGroupJoin(groupId, userName, groupName);
+              .toggleGroupJoin(groupId, groupName);
           if (isJoined) {
             setState(() {
               isJoined = !isJoined;

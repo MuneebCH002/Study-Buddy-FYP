@@ -12,7 +12,7 @@
 
 
     <application
-        android:label="studybuddyapp"
+        android:label="StudyBuddy"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver" />

@@ -9,11 +9,14 @@ class ResultsScreen extends StatelessWidget {
       {super.key,
       required this.score,
       required this.totalQuestions,
-      required this.whichTopic, required this.groupId});
+      required this.whichTopic,
+      required this.groupId,
+      required this.attempterName});
   final int score;
   final int totalQuestions;
   final String whichTopic;
   final String groupId;
+  final String attempterName;
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +38,9 @@ class ResultsScreen extends StatelessWidget {
           elevation: 0,
           actions: [
             IconButton(
-              onPressed: () async{
-                String? userId = await getCurrentUserId(); // Implement this function to get the current user's ID
+              onPressed: () async {
+                String? userId =
+                    await getCurrentUserId(); // Implement this function to get the current user's ID
 
                 if (userId != '') {
                   // Save the user's score and mark the quiz as attempted
@@ -49,22 +53,26 @@ class ResultsScreen extends StatelessWidget {
                     'score': score,
                     'total_questions': totalQuestions,
                     'attempted': true,
-                    'group_id':groupId
+                    'group_id': groupId,
+                    'user_name': attempterName
                   });
                   print('added quiz_attempts in user collection');
 
-                  await FirebaseFirestore.instance.collection('quiz_attempts').add({
-                    'userId':userId,
+                  await FirebaseFirestore.instance
+                      .collection('quiz_attempts')
+                      .add({
+                    'userId': userId,
                     'quiz_topic': whichTopic,
                     'score': score,
-                    'group_id':groupId
+                    'group_id': groupId,
+                    'user_name': attempterName
                   });
                   print('added quiz_attempts in quiz_attempts collection');
 
                   // Navigate back to the previous screen
-                  Navigator.popUntil(context, (route) => route.isFirst);
+                  Navigator.pop(context);
                 } else {
-                  Navigator.popUntil(context, (route) => route.isFirst);
+                  Navigator.pop(context);
                 }
               },
               icon: const Icon(
@@ -116,12 +124,13 @@ class ResultsScreen extends StatelessWidget {
               //         ),
               //   ),
               // ),
-              const SizedBox(height: 20,
+              const SizedBox(
+                height: 20,
               ),
               ResultsCard(
                   roundedPercentageScore: roundedPercentageScore,
-                  score:score,
-                  totalScore:totalQuestions,
+                  score: score,
+                  totalScore: totalQuestions,
                   bgColor3: bgColor3),
               const SizedBox(
                 height: 25,
@@ -134,8 +143,9 @@ class ResultsScreen extends StatelessWidget {
                   ),
                   elevation: MaterialStateProperty.all(4),
                 ),
-                onPressed: () async{
-                  String? userId = await getCurrentUserId(); // Implement this function to get the current user's ID
+                onPressed: () async {
+                  String? userId =
+                      await getCurrentUserId(); // Implement this function to get the current user's ID
 
                   if (userId != '') {
                     // Save the user's score and mark the quiz as attempted
@@ -148,22 +158,26 @@ class ResultsScreen extends StatelessWidget {
                       'score': score,
                       'total_questions': totalQuestions,
                       'attempted': true,
-                      'group_id':groupId
+                      'group_id': groupId,
+                      'user_name': attempterName
                     });
                     print('added quiz_attempts in user collection');
 
-                    await FirebaseFirestore.instance.collection('quiz_attempts').add({
-                      'userId':userId,
+                    await FirebaseFirestore.instance
+                        .collection('quiz_attempts')
+                        .add({
+                      'userId': userId,
                       'quiz_topic': whichTopic,
                       'score': score,
-                      'group_id':groupId
+                      'group_id': groupId,
+                      'user_name': attempterName
                     });
                     print('added quiz_attempts in quiz_attempts collection');
 
                     // Navigate back to the previous screen
-                    Navigator.popUntil(context, (route) => route.isFirst);
+                    Navigator.pop(context);
                   } else {
-                    Navigator.popUntil(context, (route) => route.isFirst);
+                    Navigator.pop(context);
                   }
                 },
                 child: const Text(
@@ -181,7 +195,8 @@ class ResultsScreen extends StatelessWidget {
       ),
     );
   }
-  Future<String> getCurrentUserId()async{
+
+  Future<String> getCurrentUserId() async {
     return FirebaseAuth.instance.currentUser!.uid;
   }
 }

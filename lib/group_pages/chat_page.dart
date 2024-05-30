@@ -212,7 +212,7 @@ class _ChatPageState extends State<ChatPage> {
                               return HomePageQuiz(groupId: widget.groupId);
                             }));
                           } else {
-                            _attemptQuiz();
+                            _attemptQuiz(widget.userName.toLowerCase());
                           }
                         },
                         child: Image.asset('assets/quizIcon.png', color: Theme.of(context).primaryColor, height: 40),
@@ -425,7 +425,7 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  Future<void> _attemptQuiz() async {
+  Future<void> _attemptQuiz(username) async {
     try {
       DocumentSnapshot<Object?>? latestActiveQuiz = await getLatestActiveQuiz();
       if (latestActiveQuiz != null && latestActiveQuiz.exists) {
@@ -446,6 +446,7 @@ class _ChatPageState extends State<ChatPage> {
             context,
             MaterialPageRoute(
               builder: (context) => QuizScreen(
+                attempterName:username,
                 topicType: quizData.topicName,
                 questionlenght: quizData.topicQuestions,
                 optionsList: quizData.topicQuestions.map((question) => question.options).toList(), groupId: widget.groupId,

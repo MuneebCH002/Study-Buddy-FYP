@@ -9,11 +9,12 @@ class QuizScreen extends StatefulWidget {
   final List<dynamic> questionlenght;
   final dynamic optionsList;
   final String groupId;
+  final String attempterName;
   const QuizScreen(
       {super.key,
       required this.questionlenght,
       required this.optionsList,
-      required this.topicType, required this.groupId});
+      required this.topicType, required this.groupId, required this.attempterName});
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -67,7 +68,7 @@ class _QuizScreenState extends State<QuizScreen> {
           builder: (context) => ResultsScreen(
             score: score,
             totalQuestions: widget.questionlenght.length,
-            whichTopic: widget.topicType, groupId: widget.groupId,
+            whichTopic: widget.topicType, groupId: widget.groupId, attempterName: widget.attempterName,
           ),
         ),
       );
@@ -354,6 +355,7 @@ class _QuizScreenState extends State<QuizScreen> {
             context,
             MaterialPageRoute(
               builder: (context) => ResultsScreen(
+                attempterName:widget.attempterName,
                 groupId:widget.groupId,
                 score: score,
                 totalQuestions: widget.questionlenght.length,

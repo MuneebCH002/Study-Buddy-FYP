@@ -57,6 +57,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(' FirebaseAuth.instance.currentUser ${ FirebaseAuth.instance.currentUser}');
     return MaterialApp(
       theme: ThemeData(
         primaryColor: Constants().primaryColor,
@@ -91,8 +92,12 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void checkLoggedInStatus() async {
-    bool isSignedIn = await HelperFunctions.getUserLoggedInStatus() ?? false;
-    this.isSignedIn=isSignedIn;
+    if( FirebaseAuth.instance.currentUser!=null){
+     isSignedIn=true;
+    }
+    else{
+      isSignedIn=false;
+    }
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (BuildContext context) =>

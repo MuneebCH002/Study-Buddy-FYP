@@ -93,6 +93,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           sender: snapshot.data.docs[index]['sender'],
                           sentByMe: widget.userName ==
                               snapshot.data.docs[index]['sender'],
+                          senderId:snapshot.data.docs[index]['sender_id'],
                           messageType: snapshot.data.docs[index]['type'],
                         );
                       },

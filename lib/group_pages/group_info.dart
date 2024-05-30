@@ -142,7 +142,6 @@ class _GroupInfoState extends State<GroupInfo> {
                                           .instance.currentUser!.uid)
                                   .toggleGroupJoin(
                                       widget.groupId,
-                                      getName(widget.adminName),
                                       widget.groupName)
                                   .whenComplete(() {
                                 nextScreenReplace(context, const HomePage());

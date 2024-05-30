@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuizScoresScreen extends StatelessWidget {
-  const QuizScoresScreen({super.key,required this.groupId});
+  const QuizScoresScreen({super.key, required this.groupId});
 
- final String groupId;
+  final String groupId;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class QuizScoresScreen extends StatelessWidget {
         title: const Text('Quiz Scores'),
       ),
       body: FutureBuilder<QuerySnapshot>(
-        future: FirebaseFirestore.instance.collection('quiz_attempts').where('group_id',isEqualTo: groupId).get(),
+        future: FirebaseFirestore.instance.collection('quiz_attempts').where('group_id', isEqualTo: groupId).get(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -32,6 +32,7 @@ class QuizScoresScreen extends StatelessWidget {
               userScores[userId]!.add({
                 'quiz_topic': attempt['quiz_topic'],
                 'score': attempt['score'],
+                'user_name': attempt['user_name']
               });
             });
 
@@ -40,10 +41,16 @@ class QuizScoresScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 String userId = userScores.keys.elementAt(index);
                 List<Map<String, dynamic>> scores = userScores[userId]!;
+                String userName = scores.isNotEmpty ? scores[0]['user_name'] : 'Unknown';
 
                 return Card(
                   child: ListTile(
-                    title: Text('User ID: ${userId.toString()}'),
+                    title: Column(
+                      children: [
+                        Text('User ID: $userId'),
+                        Text('User Name: $userName'),
+                      ],
+                    ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: scores.map((scoreData) {
