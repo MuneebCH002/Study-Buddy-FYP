@@ -292,28 +292,6 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  // sendMessage(String messageType) {
-  //   if (messageController.text.isNotEmpty) {
-  //     String messageId = FirebaseAuth.instance.currentUser!.uid + '_' + widget.userName;
-  //     Map<String, dynamic> chatMessageMap = {
-  //       'sender_id': FirebaseAuth.instance.currentUser!.uid.toString(),
-  //       'message_id': messageId,
-  //       'type': messageType,
-  //       'fileUrl': fileUrl,
-  //       'fileExtension': fileExtension,
-  //       'message': messageController.text,
-  //       'sender': widget.userName,
-  //       'time': FieldValue.serverTimestamp(),
-  //     };
-  //     DatabaseService().sendMessage(widget.groupId, chatMessageMap);
-  //     updateLastSeenMessage(widget.groupId, messageId);
-  //     setState(() {
-  //       messageController.clear();
-  //       fileUrl = '';
-  //     });
-  //   }
-  // }
-
   Future<void> sendMessage(String messageType) async {
     if (messageController.text.isNotEmpty) {
       String userId = FirebaseAuth.instance.currentUser!.uid;
@@ -361,10 +339,6 @@ class _ChatPageState extends State<ChatPage> {
           }
         }
 
-        // Send push notification
-        // if (tokens.isNotEmpty) {
-        //   await sendPushNotification(tokens, userName, messageController.text);
-        // }
       }
     }
   }
@@ -467,29 +441,3 @@ class _ChatPageState extends State<ChatPage> {
   }
 }
 
-// Future<void> sendPushNotification(List<String> tokens, String title, String body) async {
-//   const String serverKey = '5ec9224165afe44922a45db1a0c370dedc6d7329'; // Replace with your FCM server key
-//
-//   final headers = {
-//     'Content-Type': 'application/json',
-//     'Authorization': 'key=$serverKey',
-//   };
-//
-//   final payload = {
-//     'registration_ids': tokens,
-//     'notification': {
-//       'title': title,
-//       'body': body,
-//     },
-//   };
-//
-//   final response = await http.post(
-//     Uri.parse('https://fcm.googleapis.com/fcm/send'),
-//     headers: headers,
-//     body: json.encode(payload),
-//   );
-//
-//   if (response.statusCode != 200) {
-//     print('Failed to send notification: ${response.body}');
-//   }
-// }

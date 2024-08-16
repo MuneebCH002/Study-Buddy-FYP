@@ -127,7 +127,8 @@ class _SplashScreenState extends State<SplashScreen> {
               style: TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 82, 4, 96),
+                  color: Color.fromARGB(255, 82, 4, 96)
+                  ,
                   fontStyle: FontStyle.italic),
             ),
             const SizedBox(

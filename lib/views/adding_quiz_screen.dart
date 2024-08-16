@@ -30,34 +30,6 @@ class _AddQuizDialogState extends State<AddQuizDialog> {
               controller: _topicNameController,
               decoration: const InputDecoration(labelText: 'Topic Name'),
             ),
-            // const SizedBox(height: 10),
-            // const Text('Select Color:'),
-            // const SizedBox(height: 5),
-            // SingleChildScrollView(
-            //   scrollDirection: Axis.horizontal,
-            //   child: Row(
-            //     children: <Widget>[
-            //       _colorOption(Colors.blue),
-            //       _colorOption(Colors.red),
-            //       _colorOption(Colors.green),
-            //       // Add more color options here
-            //     ],
-            //   ),
-            // ),
-            // const SizedBox(height: 10),
-            // const Text('Select Icon:'),
-            // const SizedBox(height: 5),
-            // SingleChildScrollView(
-            //   scrollDirection: Axis.horizontal,
-            //   child: Row(
-            //     children: <Widget>[
-            //       _iconOption(Icons.question_answer),
-            //       _iconOption(Icons.star),
-            //       _iconOption(Icons.code),
-            //       // Add more icon options here
-            //     ],
-            //   ),
-            // ),
             const SizedBox(height: 10),
             const Text('Add Questions:'),
             Column(

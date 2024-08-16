@@ -140,6 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30))),
+
                             child: const Text(
                               "Sign In",
                               style:
@@ -150,6 +151,8 @@ class _LoginPageState extends State<LoginPage> {
                             },
                           ),
                         ),
+
+                        
                         const SizedBox(
                           height: 10,
                         ),
@@ -192,7 +195,6 @@ class _LoginPageState extends State<LoginPage> {
           await HelperFunctions.saveUserLoggedInStatus(true);
           await HelperFunctions.saveUserEmailSF(email);
           await storeToken(FirebaseAuth.instance.currentUser!.uid);
-          // await HelperFunctions.saveUserNameSF(snapshot.docs[0]['fullName']);
           nextScreenReplace(context, const HomePage());
         } else {
           showSnackbar(context, Colors.red, value);

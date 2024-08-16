@@ -47,7 +47,7 @@ class QuizScoresScreen extends StatelessWidget {
                   child: ListTile(
                     title: Column(
                       children: [
-                        Text('User ID: $userId'),
+                        //Text('User ID: $userId'),
                         Text('User Name: $userName'),
                       ],
                     ),
